@@ -17,7 +17,7 @@ public partial class AGCC : MonoBehaviour {
 	string sguid = "52a06444-ff13-654b-bfa1-29da9f7124dd";
 
 	string iguid_server = "";
-	string iguid_player = "";
+	string iguid_player = "2a0ccd1d-f564-f74f-b1c6-d2a6157b8b59";
 
     string sguid_game = "c4345a29-310f-d241-b95c-77928bf819c6";
     string lguid = "";
@@ -152,13 +152,33 @@ public class ServerSettings
 [System.Serializable]
 public class PlayerInfo
 {
+	/* communicate with arcalet */
+	internal	ArcaletGame ag = null;
+	string 		iguid_player = "2a0ccd1d-f564-f74f-b1c6-d2a6157b8b59";
+	int 		itemId = 0;
+	
     public string nickname = "NickName";
     public string account = "Account";
+	
     public int win = 0;
     public int lose = 0;
     public int draw = 0;
     public string winRate = "0%";
 	public string fbUserId = "";
+
+	public int character_num = 0;
+
+	internal void SetArcalet(ArcaletGame arg)
+	{
+		ag = arg;
+	}
+
+	internal void SetItemId(int id)
+	{
+		itemId = id;
+		Debug.Log("itemId = " + itemId);
+	}
+	
     internal void SetWinRate()
     {
         if (win == 0) winRate = "0%";
@@ -169,6 +189,25 @@ public class PlayerInfo
             winRate = rate_100 + "%";
         }
     }
+
+	internal void SetCharaterNum(int num)
+	{
+		ArcaletItem.SetItemInstanceAttribute(ag, iguid_player, itemId, "p_character_num", num.ToString(), 
+			 CB_SetItemAttribute, "character_num");		
+	}
+
+	void CB_SetItemAttribute(int code, object token) 
+	{
+		if(code == 0) 
+		{
+			string attr = token.ToString();
+			Debug.Log("SetItemAttribute : " + attr + " Successed");
+		}
+		else 
+		{
+			Debug.LogWarning("SetItemAttribute Failed - Error:" + code);
+		}
+	}
 }
 
 

@@ -51,7 +51,6 @@ public partial class AGCC {
 		m_email	    = email;
 		ag = new ArcaletGame(username, password, gguid, sguid, certificate );
 		Debug.Log("ArcaletLaunch 2");
-	//	ag = new ArcaletGame("bbhappy010", "12345678", gguid, sguid, certificate );
 		ag.onMessageIn += MainMessageIn;
 		ag.onPrivateMessageIn += PrivateMessageIn;
 		ag.onCompletion += CB_ArcaletLaunch;		
@@ -62,9 +61,11 @@ public partial class AGCC {
 	void CB_ArcaletLaunch(int code, ArcaletGame game)
 	{	
 		Debug.Log("CB_ArcaletLaunch");
-		if(code==0) {
+		if(code==0) 
+		{
 			Debug.Log("ArcaletLaunch Successed");
-            SceneManager.LoadScene("lobby");
+			m_PlayerInfo.SetArcalet(ag);
+			GetPlayerInfos("");
             LoginCheck();
         }
 		else {
@@ -140,15 +141,6 @@ public partial class AGCC {
 	void LoginCheck()
 	{	
 		Debug.Log("LoginCheck");
-	//	MainManager menu = GameObject.FindObjectOfType(typeof(MainManager)) as MainManager;
-	//	if(menu == null) 
-	//		return;
-		
-	//	if(!serverSettings.passageGate) {
-	//		menu.LoginError("Server is closed.");
-	//		return;
-	//	}
-	//	StartCoroutine("DPLinkTimer");
 		ag.SendOnClose("quit:" + ag.gameUserid + "/" + ag.poid);
 		ag.Send("new:" + ag.gameUserid + "/" + ag.poid);
 	}
@@ -157,59 +149,41 @@ public partial class AGCC {
 	{
 		yield return new  WaitForSeconds(10);
 		Debug.Log("DPLink TimeOut");
-	//	MainManager menu = GameObject.FindObjectOfType(typeof(MainManager)) as MainManager;
-	//	if(menu != null) 
-	//		menu.LoginError("DPLink TimeOut");
 	}
 	
 	//get item instance - player informations
 	void GetPlayerInfos(string msg)
 	{
 		Debug.Log("GetPlayerInfos");
-		serverSettings.dpPoid = int.Parse(msg);
 		ArcaletItem.GetItemInstance(ag, iguid_player, CB_GetPlayerInfos, null);
 	}
 	
 	//callback function
 	void CB_GetPlayerInfos(int code, object data, object token)
 	{	
-	//	MainManager menu = GameObject.FindObjectOfType(typeof(MainManager)) as MainManager;
-	//	if(menu == null) 
-	//		return;
-	/*	
-		if(code == 0) {
+		Debug.Log("GetPlayerInfos Successed");
+		if(code == 0) 
+		{
 			Debug.Log("GetPlayerInfos Successed");
 			List<Hashtable> list = data as List<Hashtable>;
 			List<Hashtable> attr_ht = list[0]["attr"] as List<Hashtable>;
-			
-			foreach (Hashtable attr in attr_ht) {
-	            if(attr["name"].ToString() == "Win")
-	            	OXGame.playerInfo.win = int.Parse(attr["value"].ToString());
 
-	           	if(attr["name"].ToString() == "Lose")
-	           		OXGame.playerInfo.lose = int.Parse(attr["value"].ToString());
-				
-				if(attr["name"].ToString() == "Draw")
-	           		OXGame.playerInfo.draw = int.Parse(attr["value"].ToString());
-				
-				if(attr["name"].ToString() == "GoodOX") {					
-					if(attr["value"].ToString() != "0")
-						OXGame.shopInfo.goodOX = true;
-				}
-				
-				if(attr["name"].ToString() == "GoodBoard") {					
-					if(attr["value"].ToString() != "0")
-						OXGame.shopInfo.goodBoard = true;
-				}
-	      	}
-			OXGame.playerInfo.SetWinRate();
-			StopCoroutine("DPLinkTimer");
-			menu.LoginSuccessed();
+			m_PlayerInfo.SetItemId(int.Parse(list[0]["id"].ToString())); 
+			
+			foreach (Hashtable attr in attr_ht) 
+			{
+				Debug.Log("attr[name].ToString() = " + attr["name"].ToString());
+				if (attr["name"].ToString() == "p_character_num")
+					m_PlayerInfo.character_num = int.Parse(attr["value"].ToString());
+	        }
+			SceneManager.LoadScene("lobby");
 		}
-		else {
+		else 
+		{
+			/* get player info again */
+			GetPlayerInfos("");
 			Debug.Log("GetPlayerInfos Failed: " + code);
-			menu.LoginError("CB_GetPlayerInfos Failed: " + code);
-		}*/
+		}
 	}
 	
 	//set nickname
