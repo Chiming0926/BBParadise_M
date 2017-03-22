@@ -88,7 +88,7 @@ public partial class AGCC : MonoBehaviour {
 	
 	void GameMessageIn(string msg, int delay, ArcaletScene scene)
 	{
-	/*	try {
+		try {
 			Debug.Log("@ GameMsg>> " + msg);
 			string[] cmds = msg.Split(':');
 			CGameManager game = FindObjectOfType(typeof(CGameManager)) as CGameManager;
@@ -112,6 +112,9 @@ public partial class AGCC : MonoBehaviour {
                 case "bb_death":
                     game.handle_death_message(cmds[1]);
                     break;
+				case "bb_move_Controlled_player":
+                    game.controlled_player_move(cmds[1]);
+					break;
 				case "bb_over":
 					//game.
 					break;
@@ -126,7 +129,7 @@ public partial class AGCC : MonoBehaviour {
 			//	case "dp_sync" : game.TimerSynchronization(cmds[1], delay); break;
             }
         }
-        catch (Exception e) { Debug.LogWarning("GameMessageIn Exception:\r\n" + e.ToString()); }*/
+        catch (Exception e) { Debug.LogWarning("GameMessageIn Exception:\r\n" + e.ToString()); }
 	}
 	
 	void OnApplicationQuit()

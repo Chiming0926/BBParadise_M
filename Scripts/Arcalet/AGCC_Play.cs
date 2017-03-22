@@ -39,7 +39,7 @@ public partial class AGCC {
     {
         matchInfos.GenerateMatchCode();
         string msg = ag.gameUserid + "/" + ag.poid + "/" + "test520" + "/" + matchInfos.matchCode + "/" + m_PlayerInfo.fbUserId;
-        ag.PrivacySend("match:" + msg, serverSettings.dpPoid);
+		ag.PrivacySend("match:" + msg, serverSettings.dpPoid);
     }
 
     void DP_Room(string msg) 
@@ -60,7 +60,7 @@ public partial class AGCC {
 			sn.onMessageIn += GameMessageIn;
 			sn.onCompletion += CB_EnterRoom;
 			sn.Launch();
-            UnityEngine.SceneManagement.SceneManager.LoadScene("level_village");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("game");
 		}
 	}
 	

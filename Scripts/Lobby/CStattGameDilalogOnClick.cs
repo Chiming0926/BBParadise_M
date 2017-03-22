@@ -20,14 +20,14 @@ public class CStattGameDilalogOnClick : MonoBehaviour {
             return;
         if (gameObject.tag == "start_game_dialog_close")
         {
-            if (CStartGameDialog.show_new_game_dialog == 1)
-                CStartGameDialog.show_new_game_dialog = 0;
-            else
-                CLobby_OnClick.show_start_game_dialog = 0;
+           	if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG)
+				CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
+			if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_NEW_GAME_DIALOG)
+				CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG;
         }
         else if (gameObject.tag == "start_new_game_player_fight")
         {
-            CStartGameDialog.show_new_game_dialog = 1;
+			CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.START_NEW_GAME_DIALOG;
             agcc.Match();
         }
         else if (gameObject.tag == "start_new_game_challeage")

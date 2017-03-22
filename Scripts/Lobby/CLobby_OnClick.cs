@@ -6,16 +6,18 @@ public class CLobby_OnClick : MonoBehaviour {
     public static int show_start_game_dialog = 0;
 	public static int show_change_character_dialog = 0;
 
+	
+
     internal enum CURRENT_DIALOG 
 	{ 
+		NULL_DIALOG,
 		LOBBY_DIALOG,
 		ROLE_DIALOG, 
-		START_GAME_DIALOG, 
+		START_GAME_DIALOG,
+		START_NEW_GAME_DIALOG,
 		CHANGE_CHARACTER_DIALOG, 
-		PROPS_DIALOG, 
-		Thu, 
-		Fri, 
-		Sat
+		PROPS_DIALOG,
+		POTION_DIALOG
 	};
 
 	internal static CURRENT_DIALOG m_CurrentDialog = CURRENT_DIALOG.LOBBY_DIALOG;
@@ -34,6 +36,7 @@ public class CLobby_OnClick : MonoBehaviour {
     {
 		if (m_CurrentDialog != CURRENT_DIALOG.LOBBY_DIALOG)
 			return;
+		Debug.Log("OnMouseDown gameObject.tag = " +  gameObject.tag);
 		if (gameObject.tag == "role")
         {
 			m_CurrentDialog = CURRENT_DIALOG.ROLE_DIALOG;
@@ -47,6 +50,7 @@ public class CLobby_OnClick : MonoBehaviour {
         else if (gameObject.tag == "potion")
         {
             Debug.Log("potion down");
+			m_CurrentDialog = CURRENT_DIALOG.POTION_DIALOG;
         }
         else if (gameObject.tag == "auction")
         {
@@ -59,7 +63,7 @@ public class CLobby_OnClick : MonoBehaviour {
         else if (gameObject.tag == "start_game")
         {
             Debug.Log("start game");
-            show_start_game_dialog = 1;
+            m_CurrentDialog = CURRENT_DIALOG.START_GAME_DIALOG;
         }
 		else if (gameObject.tag == "lobby_character")
         {

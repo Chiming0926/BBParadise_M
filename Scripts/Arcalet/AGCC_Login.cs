@@ -45,10 +45,18 @@ public partial class AGCC {
 		Debug.Log("ArcaletLaunch");
 		if(ag!=null)
 			ag.Dispose();
-		Debug.Log("ArcaletLaunch1");
-		m_username  = username;
+
+        System.Random crandom = new System.Random();
+        int x = crandom.Next(3, 10);
+        username = "bbhappy" + x.ToString("000");
+        password = "12345678";
+        Debug.Log("username = " + username);
+        m_username = username;
 		m_password  = password;
 		m_email	    = email;
+
+
+
 		ag = new ArcaletGame(username, password, gguid, sguid, certificate );
 		Debug.Log("ArcaletLaunch 2");
 		ag.onMessageIn += MainMessageIn;
@@ -65,7 +73,6 @@ public partial class AGCC {
 		{
 			Debug.Log("ArcaletLaunch Successed");
 			m_PlayerInfo.SetArcalet(ag);
-			GetPlayerInfos("");
             LoginCheck();
         }
 		else {
@@ -154,7 +161,8 @@ public partial class AGCC {
 	//get item instance - player informations
 	void GetPlayerInfos(string msg)
 	{
-		Debug.Log("GetPlayerInfos");
+		Debug.Log("GetPlayerInfos msg = " + msg);
+		serverSettings.dpPoid = int.Parse(msg);
 		ArcaletItem.GetItemInstance(ag, iguid_player, CB_GetPlayerInfos, null);
 	}
 	
@@ -181,7 +189,7 @@ public partial class AGCC {
 		else 
 		{
 			/* get player info again */
-			GetPlayerInfos("");
+			//GetPlayerInfos("");
 			Debug.Log("GetPlayerInfos Failed: " + code);
 		}
 	}

@@ -12,7 +12,7 @@ public class CLogin : MonoBehaviour {
 	/* messages for fb login */
 	string Status;
 	string LastResponse;
-
+	bool   m_Login;
 	/* arcalet object */
 	AGCC m_agcc = null;
 
@@ -23,6 +23,7 @@ public class CLogin : MonoBehaviour {
 		FB.Init(this.OnInitComplete, this.OnHideUnity);
 		m_agcc = FindObjectOfType(typeof(AGCC)) as AGCC;
 		if(m_agcc == null) return;
+		m_Login = false;
 	}
 	
 	// Update is called once per frame
@@ -53,8 +54,12 @@ public class CLogin : MonoBehaviour {
     {
         if (gameObject.tag == "fb_login")
         {
-     		Debug.Log("start fb login process");
-			FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, this.FbLoginCallback);
+			if (m_Login == true)
+				return;
+            m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
+            Debug.Log("start fb login process");
+		//	FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, this.FbLoginCallback);
+			m_Login = true;
         }
     }
 
