@@ -116,7 +116,7 @@ public partial class AGCC : MonoBehaviour {
                     game.controlled_player_move(cmds[1]);
 					break;
 				case "bb_over":
-					//game.
+					game.handle_game_over(cmds[1]);
 					break;
 				default:
 					break;

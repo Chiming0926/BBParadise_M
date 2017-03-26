@@ -60,6 +60,11 @@ public partial class AGCC {
 			sn.onMessageIn += GameMessageIn;
 			sn.onCompletion += CB_EnterRoom;
 			sn.Launch();
+
+            CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
+
+
+
             UnityEngine.SceneManagement.SceneManager.LoadScene("game");
 		}
 	}

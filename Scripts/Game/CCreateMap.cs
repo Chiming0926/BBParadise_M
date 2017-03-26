@@ -9,13 +9,13 @@ public partial class CGameManager
     public Texture2D[]  m_level = new Texture2D[2];
     public Texture2D    m_flag;
 
-    public static int map_width = 16;
+    public static int map_width = 18;
     public static int map_height = 10;
 
-    private float start_x = -7.5f;
+    private float start_x = -8.5f;
     private float start_y = 4.5f;
 
-    private static int[ , ] pirate_map = 
+    /*private static int[ , ] pirate_map = 
                         {
                             {0, 0, (1 | 0x00020000), 0, 1, 0, 1, 1, 1, 1, 0, 65538, 0, (1 | 0x00030000), 0, 0},
                             {0, (3 | 0x00010000), 1, (1 | 0x00020000), 1, 1, 0, 0, 0, 0, (1 | 0x00050000), 1, 1, 1, (3 | 0x00040000), 0},
@@ -28,21 +28,21 @@ public partial class CGameManager
                             {0, (3 | 0x00010000), (1 | 0x00020000), 1, 1, 1, 1, (1 | 0x00010000), 1, 1, (1 | 0x00020000), 1, 1, 1, 3, 0},
                             {0, 0, 1, 0, (1 | 0x00020000), 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0},
                         };
-    /*
+    */
     private static int[,] pirate_map =
                        {
-                            {0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 65537, 0, 0},
-                            {0, 3, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 3, 0},
-                            {1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1},
-                            {1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1},
-                            {0, 0, 1, 1, 0, 2, 0, 0, 0, 0, 2, 0, 1, 1, 0, 0},
-                            {0, 0, 1, 1, 0, 2, 0, 9, 9, 0, 2, 0, 1, 1, 0, 0},
-                            {1, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 1, 1},
-                            {1, 1, 1, 1, 1, 1, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1},
-                            {0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0},
-                            {0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0},
+                            {0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+                            {0, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 0},
+                            {1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1},
+                            {1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1},
+                            {0, 0, 1, 1, 1, 0, 2, 0, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0},
+                            {0, 0, 1, 1, 1, 0, 2, 0, 9, 9, 0, 2, 0, 1, 1, 1, 0, 0},
+                            {1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 1, 0, 1, 1},
+                            {1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1},
+                            {0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0},
+                            {0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
                         };
-    */
+    
     bool CreateMap(int level_num)
     {
         if (level_num < MAX_LEVEL_NUM)
@@ -90,9 +90,9 @@ public partial class CGameManager
 
                 if (map[i, j] != 0)
                 {
-                    sr_box.sortingOrder = i + 8;
-                    sr_cask.sortingOrder = i + 8;
-                    sr_screw.sortingOrder = i + 8;
+                    sr_box.sortingOrder = i*2 + 8;
+                    sr_cask.sortingOrder = i*2 + 8;
+                    sr_screw.sortingOrder = i*2 + 8;
 
                     int num = map[i, j] & 0x0000ffff;
                     GameObject obj;

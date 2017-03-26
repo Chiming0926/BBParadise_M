@@ -30,7 +30,7 @@ public partial class CGameManager
 
     List<PlayerData> player_list = new List<PlayerData>();
 
-    private static bool NONETWORK = true;
+    private static bool NONETWORK = false;
 
     PLAYER_DIRECTION cur_direct;
     AGCC m_agcc = null;
@@ -44,9 +44,12 @@ public partial class CGameManager
         {
             PlayerData playerData = new PlayerData();
             playerData.player_account = "test520";
-            playerData.player_ins = Instantiate(m_PlayerPrefabs[1], new Vector3(7.5f, 4.5f, -1), gameObject.transform.rotation) as GameObject;
+            playerData.player_ins = Instantiate(m_PlayerPrefabs[0], new Vector3(8.5f, 4.5f, -1), gameObject.transform.rotation) as GameObject;
             player_list.Add(playerData);
             playerData.player_ins.GetComponent<CPlayer>().SetControllerStatus(true);
+
+            SpriteRenderer sp = playerData.player_ins.GetComponent<SpriteRenderer>();
+
         }
     }
 
@@ -155,10 +158,8 @@ public partial class CGameManager
         {
             foreach (PlayerData data in player_list)
             {
-				Debug.Log("@@@@@@@@@@@@@ player_move 1");
                 if (data.player_account == m[0])
                 {
-					Debug.Log("@@@@@@@@@@@@@ player_move 2");
 					data.player_ins.GetComponent<CPlayer>().UpdateDirection(int.Parse(m[1]));
                 }
             }
@@ -177,7 +178,9 @@ public partial class CGameManager
             foreach (PlayerData data in player_list)
             {
                 if (data.player_account == m[0])
-                	data.player_ins.GetComponent<CPlayer>().SetPosition(float.Parse(m[2]), float.Parse(m[3]));
+                {
+                    data.player_ins.GetComponent<CPlayer>().SetPosition(float.Parse(m[2]), float.Parse(m[3]));
+                }
             }
         }
 	}
@@ -207,8 +210,8 @@ public partial class CGameManager
             Debug.Log("Gameroom is full");
             return;
         }
-        Vector3[] positionArray = new[] { new Vector3(7.5f, 4.5f, -1), new Vector3(-7.5f, 4.5f, -1), new Vector3(0.0f, 4.5f, -1),
-                                            new Vector3(7.5f, -4.5f, -1), new Vector3(-7.5f, -4.5f, -1), new Vector3(0.0f, -4.5f, -1)};
+        Vector3[] positionArray = new[] { new Vector3(8.5f, 4.5f, -1), new Vector3(-8.5f, 4.5f, -1), new Vector3(0.0f, 4.5f, -1),
+                                            new Vector3(8.5f, -4.5f, -1), new Vector3(-8.5f, -4.5f, -1), new Vector3(0.0f, -4.5f, -1)};
         string[] m = msg.Split('/');
         PlayerData playerData = new PlayerData();
 

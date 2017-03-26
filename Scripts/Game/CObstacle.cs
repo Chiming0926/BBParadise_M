@@ -30,10 +30,8 @@ public class CObstacle : MonoBehaviour
 
     internal void WoodenBom()
     {
-        Debug.Log("@@@@ m_WoodenType = " + m_WoodenType);
         if (m_WoodenType != 0)
         {
-            Debug.Log("@@@@ m_WoodenType = " + m_WoodenType);
             SpriteRenderer spr = gameObject.GetComponent<SpriteRenderer>();
             Sprite s;
             s = Sprite.Create(texture[m_WoodenType - 1], new Rect(0, 0, texture[m_WoodenType - 1].width, texture[m_WoodenType - 1].height), new Vector3(0.5f, 0.5f, 0));
@@ -49,6 +47,5 @@ public class CObstacle : MonoBehaviour
     internal void SetWoodenType(int type)
     {
         m_WoodenType = (int)((type & 0xffff0000) >> 16);
-        Debug.Log("m_WoodenType = " + m_WoodenType);
     }
 }

@@ -9,16 +9,17 @@ public class CWBall : MonoBehaviour
     public GameObject ws_right;
     public Texture2D[] texture = new Texture2D[2];
     public Texture2D textureboom;
-    public static Object[] obj = new GameObject[20];
+    public AudioClip  m_BomClip;
+
     private const int reset_factor = 5;
     private int pic = 0;
     private int cnt = 0;
     public int power = 4;
+
     // Use this for initialization
     void Start ()
     {
-	
-	}
+    }
 	
     void create_ws()
     {
@@ -133,6 +134,7 @@ public class CWBall : MonoBehaviour
         }
         else if (cnt >= 120 && cnt <130)
         {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(m_BomClip);
             create_ws();
             SpriteRenderer spr = gameObject.GetComponent<SpriteRenderer>();
             Sprite s = Sprite.Create(textureboom, new Rect(0, 0, textureboom.width, textureboom.height), new Vector3(0.5f, 0.5f, 0));
