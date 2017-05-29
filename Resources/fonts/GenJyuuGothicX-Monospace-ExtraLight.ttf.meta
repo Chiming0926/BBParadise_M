@@ -1,0 +1,33 @@
+fileFormatVersion: 2
+guid: eed1880e6def28243b7a56d5fde10461
+timeCreated: 1495466513
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Gen Jyuu Gothic X Monospace
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: f70a8241abd5b7c45b9ad54d9d91ca2b, type: 3}
+  - {fileID: 12800000, guid: 4453fbc13e0d0794cbf0ddd96127bbc5, type: 3}
+  - {fileID: 12800000, guid: d9263fd15e3f06d4f92e3e8707d1a1b2, type: 3}
+  - {fileID: 12800000, guid: e2f5c8c21d877ae448dc118c48fc4cd8, type: 3}
+  - {fileID: 12800000, guid: a16915a639b375e42a7dded115a4a088, type: 3}
+  - {fileID: 12800000, guid: 90e00488f08c6fa48bb71ded6d4ad174, type: 3}
+  - {fileID: 12800000, guid: ee7803b9af267194e90d5597e287c056, type: 3}
+  - {fileID: 12800000, guid: e605170b026b44448916c7d8364af077, type: 3}
+  - {fileID: 12800000, guid: e494032c95b32b544806fbd8da64d524, type: 3}
+  - {fileID: 12800000, guid: 41d5f21fe7ec83446aa27c2ecb5287dc, type: 3}
+  - {fileID: 12800000, guid: 743d6adf537241a44bd719f11c82ba6a, type: 3}
+  - {fileID: 12800000, guid: 68c3b9ef874f2714ca868021cde72338, type: 3}
+  - {fileID: 12800000, guid: 75ec2cef834eb054da66446961fd5d47, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

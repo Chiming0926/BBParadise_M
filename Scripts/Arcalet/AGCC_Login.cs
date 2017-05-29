@@ -1,9 +1,9 @@
+//#define TEST
 using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-
 public partial class AGCC {
 
 	string m_username;
@@ -46,11 +46,15 @@ public partial class AGCC {
 		if(ag!=null)
 			ag.Dispose();
 
-        System.Random crandom = new System.Random();
-        int x = crandom.Next(3, 10);
-        username = "bbhappy" + x.ToString("000");
-        password = "12345678";
-        Debug.Log("username = " + username);
+        if (m_TestMode)
+        {
+            System.Random crandom = new System.Random();
+            int x = crandom.Next(3, 10);
+            username = "bbhappy" + x.ToString("000");
+            password = "12345678";
+            Debug.Log("username = " + username);
+        }
+
         m_username = username;
 		m_password  = password;
 		m_email	    = email;
@@ -72,7 +76,7 @@ public partial class AGCC {
 		if(code==0) 
 		{
 			Debug.Log("ArcaletLaunch Successed");
-			m_PlayerInfo.SetArcalet(ag);
+			m_PlayerInfo.SetArcalet(ag, this);
             LoginCheck();
         }
 		else {
@@ -84,6 +88,7 @@ public partial class AGCC {
 
 	void Regist(string username, string password, string mail)
     {
+        Debug.Log("Regist");
         string[] registToken = new string[] { username, password, mail };
         ArcaletSystem.ApplyNewUser(gguid, certificate, username, password,
          mail, CB_Regist, registToken);
@@ -136,11 +141,9 @@ public partial class AGCC {
           	}
 			LoginCheck();
 		}
-		else {
+		else
+        {
 			Debug.Log("CB_GetServerSettings Failed");
-		//	MainManager menu = GameObject.FindObjectOfType(typeof(MainManager)) as MainManager;
-		//	if(menu != null) 
-		//		menu.LoginError("CB_GetServerSettings Failed: " + code);
 		}
 	}
 	
@@ -149,7 +152,7 @@ public partial class AGCC {
 	{	
 		Debug.Log("LoginCheck");
 		ag.SendOnClose("quit:" + ag.gameUserid + "/" + ag.poid);
-		ag.Send("new:" + ag.gameUserid + "/" + ag.poid);
+		ag.Send("new:" + ag.gameUserid + "/" + ag.poid + "/" + m_email + "/" + m_PlayerInfo.fbUserId);
 	}
 	
 	IEnumerator DPLinkTimer()
@@ -159,7 +162,7 @@ public partial class AGCC {
 	}
 	
 	//get item instance - player informations
-	void GetPlayerInfos(string msg)
+	internal void GetPlayerInfos(string msg)
 	{
 		Debug.Log("GetPlayerInfos msg = " + msg);
 		serverSettings.dpPoid = int.Parse(msg);
@@ -180,10 +183,37 @@ public partial class AGCC {
 			
 			foreach (Hashtable attr in attr_ht) 
 			{
-				Debug.Log("attr[name].ToString() = " + attr["name"].ToString());
 				if (attr["name"].ToString() == "p_character_num")
 					m_PlayerInfo.character_num = int.Parse(attr["value"].ToString());
-	        }
+                if (attr["name"].ToString() == "p_cake")
+                    m_PlayerInfo.cake = int.Parse(attr["value"].ToString());
+                if (attr["name"].ToString() == "p_money")
+                    m_PlayerInfo.money = int.Parse(attr["value"].ToString());
+                if (attr["name"].ToString() == "p_gem")
+                    m_PlayerInfo.gem = int.Parse(attr["value"].ToString());
+                if (attr["name"].ToString() == "p_background_audio")
+                    m_PlayerInfo.backgroundAudio = int.Parse(attr["value"].ToString()); ;
+                if (attr["name"].ToString() == "p_special_audio")
+                    m_PlayerInfo.specialAudio = int.Parse(attr["value"].ToString()); ; ;
+                if (attr["name"].ToString() == "p_nickname")
+                {
+                    Debug.Log("attr[value].ToString()" + attr["value"].ToString());
+                    m_PlayerInfo.nickname = attr["value"].ToString();
+                }
+                //Debug.Log(m_PlayerInfo.character_num);
+                //Debug.Log(m_PlayerInfo.cake);
+                //Debug.Log(m_PlayerInfo.money);
+                //Debug.Log(m_PlayerInfo.gem);
+                //Debug.Log(m_PlayerInfo.nickname);
+                if (m_PlayerInfo.nickname == "bbparadise_string_m")
+                {
+                    Debug.Log(m_PlayerInfo.fbUserName);
+                    m_PlayerInfo.SetPlayerInfo(m_PlayerInfo.fbUserName, PlayerInfo.SET_PLAYERINFO.SET_NICKNAME);
+                    m_PlayerInfo.nickname = m_PlayerInfo.fbUserName;
+                }
+                //Debug.Log(m_PlayerInfo.nickname);
+            //    Debug.Log(m_PlayerInfo.character_num);
+            }
 			SceneManager.LoadScene("lobby");
 		}
 		else 
@@ -193,25 +223,4 @@ public partial class AGCC {
 			Debug.Log("GetPlayerInfos Failed: " + code);
 		}
 	}
-	
-	//set nickname
-	internal void SetNickName(string nick)
-	{
-		ag.SetPlayerNickname(nick, CB_SetNickName, null);
-	}
-	
-	//callback function
-	void CB_SetNickName(int code, object token)
-	{
-		if(code == 0)
-			Debug.Log("SetNickName Successed");
-		else 
-			Debug.Log("SetNickName Failed: " + code);
-	/*	OXGame.playerInfo.nickname = ag.nickname;
-		MainManager menu = GameObject.FindObjectOfType(typeof(MainManager)) as MainManager;
-		if(menu!=null)
-			menu.uiState = MenuType.Main;
-		*/
-	}
-	
 }

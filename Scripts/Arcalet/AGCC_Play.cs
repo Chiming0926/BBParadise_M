@@ -42,6 +42,12 @@ public partial class AGCC {
 		ag.PrivacySend("match:" + msg, serverSettings.dpPoid);
     }
 
+	internal void CancelMatch()
+	{
+        Debug.Log("@@@@@@@@@@@@ 123");
+		ag.PrivacySend("cancel:" + ag.poid, serverSettings.dpPoid);
+	}
+
     void DP_Room(string msg) 
 	{			
 		string[] m = msg.Split('/');
@@ -61,11 +67,11 @@ public partial class AGCC {
 			sn.onCompletion += CB_EnterRoom;
 			sn.Launch();
 
-            CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
+            //CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
 
 
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene("game");
+            SetAudio(false);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("game2");
 		}
 	}
 	

@@ -18,9 +18,12 @@ public class CStartGameDialog : MonoBehaviour {
     {
 		if (dialog != CLobby_OnClick.m_CurrentDialog)
 		{
-	        if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG)
+	        if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG
+				|| CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_NEW_GAME_DIALOG)
 	        {
-				gameObject.GetComponent<Renderer>().enabled = true;
+				if (gameObject.GetComponent<Renderer>().enabled == true)
+					return;
+                gameObject.GetComponent<Renderer>().enabled = true;
 	            foreach (Transform child in transform)
 	            {
 	                child.GetComponent<Renderer>().enabled = true;
@@ -33,7 +36,7 @@ public class CStartGameDialog : MonoBehaviour {
 	            foreach (Transform child in transform)
 	            {
 	                child.GetComponent<Renderer>().enabled = false;
-					Destroy(child.GetComponent<BoxCollider2D>());
+					Destroy(child.gameObject.GetComponent<BoxCollider2D>());
 	            }
 	        }
 			dialog = CLobby_OnClick.m_CurrentDialog;

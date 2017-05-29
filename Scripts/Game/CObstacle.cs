@@ -4,12 +4,12 @@ using System.Collections;
 public class CObstacle : MonoBehaviour
 {
     public int m_WoodenType;
-    private bool m_StartDectection;
+    public bool m_Prop;
     public Texture2D[] texture = new Texture2D[5];
 	// Use this for initialization
 	void Start () 
     {
-        m_StartDectection = false;
+        m_Prop = false;
     }
 	
 	// Update is called once per frame
@@ -20,12 +20,7 @@ public class CObstacle : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("col.tag = " + col.tag);
-        if (col.tag == "Player")
-        {
-            col.gameObject.GetComponent<CPlayer>().AddProps(m_WoodenType);
-            Destroy(gameObject);
-        }
+       
     }
 
     internal void WoodenBom()
@@ -36,7 +31,12 @@ public class CObstacle : MonoBehaviour
             Sprite s;
             s = Sprite.Create(texture[m_WoodenType - 1], new Rect(0, 0, texture[m_WoodenType - 1].width, texture[m_WoodenType - 1].height), new Vector3(0.5f, 0.5f, 0));
             spr.sprite = s;
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            m_Prop = true;
+            BoxCollider2D b2d = gameObject.GetComponent<BoxCollider2D>();
+            b2d.isTrigger = true;
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
+            foreach (Transform child in gameObject.transform)
+                Destroy(child.GetComponent<SpriteRenderer>());
         }
         else
         {

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: f2bc4364bdd6634409a0a047b7590bdd
+timeCreated: 1495466516
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Gen Jyuu Gothic XP
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 17492347f5acd734f9d03359b52c538d, type: 3}
+  - {fileID: 12800000, guid: 7ab706a714443dc46b2c8c7070adadb6, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

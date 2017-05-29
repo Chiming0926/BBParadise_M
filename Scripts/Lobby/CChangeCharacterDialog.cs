@@ -24,8 +24,10 @@ public class CChangeCharacterDialog : MonoBehaviour {
 				gameObject.GetComponent<Renderer>().enabled = true;
 		        foreach (Transform child in transform)
 		        {
+                    Debug.Log("child name = " + child.gameObject.name);
 		            child.GetComponent<Renderer>().enabled = true;
-                    child.gameObject.AddComponent<BoxCollider2D>();
+                    if (child.gameObject.name.Contains("Character"))
+                        child.gameObject.AddComponent<BoxCollider2D>();
                 }
 			}
 			else

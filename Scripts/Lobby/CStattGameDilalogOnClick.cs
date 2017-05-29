@@ -18,10 +18,15 @@ public class CStattGameDilalogOnClick : MonoBehaviour {
     {
         if (gameObject.GetComponent<Renderer>().enabled == false)
             return;
+        CLobby lobby = FindObjectOfType(typeof(CLobby)) as CLobby;
+        lobby.GetComponent<AudioSource>().PlayOneShot(lobby.m_BomClip);
         if (gameObject.tag == "start_game_dialog_close")
         {
-           	if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG)
-				CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
+            if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG)
+            {
+                CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.LOBBY_DIALOG;
+                lobby.TextControl(true);
+            }
 			if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.START_NEW_GAME_DIALOG)
 				CLobby_OnClick.m_CurrentDialog = CLobby_OnClick.CURRENT_DIALOG.START_GAME_DIALOG;
         }

@@ -13,7 +13,9 @@ public class CPotion_Dialog : MonoBehaviour {
 	{
 		if (dialog != CLobby_OnClick.m_CurrentDialog)
 		{
-			if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.POTION_DIALOG)
+            CLobby lobby = FindObjectOfType(typeof(CLobby)) as CLobby;
+            lobby.GetComponent<AudioSource>().PlayOneShot(lobby.m_BomClip);
+            if (CLobby_OnClick.m_CurrentDialog == CLobby_OnClick.CURRENT_DIALOG.POTION_DIALOG)
 	        {
 	            gameObject.GetComponent<Renderer>().enabled = true;
 	            foreach (Transform child in transform)
@@ -28,7 +30,7 @@ public class CPotion_Dialog : MonoBehaviour {
 	            foreach (Transform child in transform)
 	            {
 	                child.GetComponent<Renderer>().enabled = false;
-					Destroy(child.GetComponent<BoxCollider2D>());
+					Destroy(child.gameObject.GetComponent<BoxCollider2D>());
 	            }
 	        }
 			dialog = CLobby_OnClick.m_CurrentDialog;

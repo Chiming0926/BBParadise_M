@@ -11,7 +11,10 @@ public partial class AGCC : MonoBehaviour {
     public static int BBDEBUG_INFO = 1;
     public static int BBDEBUG_WARNING = 2;
     public static int BBDEBUG_ERROR = 4;
+    private static int CHANGE_NAME_COST = 80;
     private static int bbDebug = 7; /* debug level info, warning, error */
+    internal bool m_TestMode = false;
+
 	#region Variables	
 	string gguid = "7245577f-4961-7642-a64c-ba5bb008892c";
 	string sguid = "52a06444-ff13-654b-bfa1-29da9f7124dd";
@@ -45,7 +48,7 @@ public partial class AGCC : MonoBehaviour {
 	{
 		DontDestroyOnLoad(this);
 		ArcaletSystem.UnityEnvironment();
-	}
+    }
 	
     public static void BBDebug(int debugLevel, string msg)
     {
@@ -80,7 +83,6 @@ public partial class AGCC : MonoBehaviour {
 				case "dp_room": DP_Room(cmds[1]); break;
 				case "dp_rematch": ReMatch(cmds[1]); break;
 				case "bb_match_data": UpdateMatchData(cmds[1]); break;
-			//	case "dp_update": OXGame.UpdatePlayerInfos(cmds[1]); break;
             }
         }
         catch (Exception e) { Debug.LogWarning("PrivateMessageIn Exception:\r\n" + e.ToString()); }
@@ -103,14 +105,20 @@ public partial class AGCC : MonoBehaviour {
 				case "bb_stop": 
 					game.player_stop(cmds[1]); 
 					break;
-				case "bb_player":
+                case "bb_new_move":
+                    game.player_move(cmds[1]);
+                    break;
+                case "bb_new_stop":
+                    game.player_stop(cmds[1]);
+                    break;
+                case "bb_player":
 					game.add_player(cmds[1]);
 					break;
 				case "bb_wball":
 					game.bb_wball(cmds[1]);
 					break;
-                case "bb_death":
-                    game.handle_death_message(cmds[1]);
+                case "bb_going_to_death":
+                    game.handle_going_to_death_message(cmds[1]);
                     break;
 				case "bb_move_Controlled_player":
                     game.controlled_player_move(cmds[1]);
@@ -118,15 +126,17 @@ public partial class AGCC : MonoBehaviour {
 				case "bb_over":
 					game.handle_game_over(cmds[1]);
 					break;
-				default:
+                case "bb_props":
+                    game.HandlePropsMessage(cmds[1]);
+                    break;
+                case "bb_mount_dead":
+                    game.HandleMountDead(cmds[1]);
+                    break;
+                case "client_bb_wball":
+                    game.HandleClientWBall(cmds[1]);
+                    break;
+                default:
 					break;
-			//	case "dp_start": game.GameStart(cmds[1]); break;
-			//	case "dp_player": game.SetRevalInfos(cmds[1]); break;
-			//	case "dp_slot": game.FillSlot(cmds[1]); break;
-			//	case "dp_gameover": game.DP_GameOver(cmds[1]); break;
-			//	case "dp_draw": game.DP_Draw(cmds[1]); break;
-			//	case "dp_timeup": game.DP_TiemUP(cmds[1]); break;
-			//	case "dp_sync" : game.TimerSynchronization(cmds[1], delay); break;
             }
         }
         catch (Exception e) { Debug.LogWarning("GameMessageIn Exception:\r\n" + e.ToString()); }
@@ -142,6 +152,21 @@ public partial class AGCC : MonoBehaviour {
 	{
 		m_PlayerInfo.fbUserId = id;
 	}
+
+    internal void setFBUserName(string name)
+    {
+        m_PlayerInfo.fbUserName = name;
+    }
+
+    internal bool ChangeNickName(string name)
+    {
+        if (m_PlayerInfo.money < CHANGE_NAME_COST)
+            return false;
+        m_PlayerInfo.money -= CHANGE_NAME_COST;
+        m_PlayerInfo.SetPlayerInfo(m_PlayerInfo.money.ToString(), PlayerInfo.SET_PLAYERINFO.SET_MONEY);
+		m_PlayerInfo.SetPlayerInfo(name, PlayerInfo.SET_PLAYERINFO.SET_NICKNAME);
+        return true;
+    }
 }
 
 [System.Serializable]
@@ -155,8 +180,21 @@ public class ServerSettings
 [System.Serializable]
 public class PlayerInfo
 {
+
+    internal enum SET_PLAYERINFO
+    {
+        SET_CHARACTER,
+        SET_NICKNAME,
+        SET_CAKE,
+        SET_MONEY,
+        SET_GEM,
+        SET_BACKGROUND_AUDIO,
+        SET_SPECIAL_AUDIO,
+    };
+
 	/* communicate with arcalet */
 	internal	ArcaletGame ag = null;
+	AGCC		agcc = null;
 	string 		iguid_player = "2a0ccd1d-f564-f74f-b1c6-d2a6157b8b59";
 	int 		itemId = 0;
 	
@@ -168,12 +206,19 @@ public class PlayerInfo
     public int draw = 0;
     public string winRate = "0%";
 	public string fbUserId = "";
+    public string fbUserName = "";
+    public int gem = 0;
+    public int money = 0;
+    public int cake = 0;
+    public int backgroundAudio = 0;
+    public int specialAudio = 0;
 
 	public int character_num = 0;
 
-	internal void SetArcalet(ArcaletGame arg)
+	internal void SetArcalet(ArcaletGame arg, AGCC agc)
 	{
 		ag = arg;
+		agcc = agc;
 	}
 
 	internal void SetItemId(int id)
@@ -193,11 +238,13 @@ public class PlayerInfo
         }
     }
 
-	internal void SetCharaterNum(int num)
-	{
-		ArcaletItem.SetItemInstanceAttribute(ag, iguid_player, itemId, "p_character_num", num.ToString(), 
-			 CB_SetItemAttribute, "character_num");		
-	}
+    internal void SetPlayerInfo(string value, PlayerInfo.SET_PLAYERINFO cmd)
+    {
+        string[] Params = { "p_character_num", "p_nickname", "p_cake", "p_money", "p_gem",
+                            "p_background_audio", "p_special_audio"};
+        ArcaletItem.SetItemInstanceAttribute(ag, iguid_player, itemId, Params[(int)cmd], value,
+                    CB_SetItemAttribute, Params[(int)cmd]);
+    }
 
 	void CB_SetItemAttribute(int code, object token) 
 	{
@@ -205,6 +252,7 @@ public class PlayerInfo
 		{
 			string attr = token.ToString();
 			Debug.Log("SetItemAttribute : " + attr + " Successed");
+			agcc.GetPlayerInfos("test");
 		}
 		else 
 		{

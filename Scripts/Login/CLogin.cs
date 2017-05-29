@@ -16,9 +16,11 @@ public class CLogin : MonoBehaviour {
 	/* arcalet object */
 	AGCC m_agcc = null;
 
+    public AudioClip m_ButtonClip;
 
-	// Use this for initialization
-	void Start () 
+
+    // Use this for initialization
+    void Start () 
 	{
 		FB.Init(this.OnInitComplete, this.OnHideUnity);
 		m_agcc = FindObjectOfType(typeof(AGCC)) as AGCC;
@@ -56,10 +58,17 @@ public class CLogin : MonoBehaviour {
         {
 			if (m_Login == true)
 				return;
-            m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
-            Debug.Log("start fb login process");
-		//	FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, this.FbLoginCallback);
-			m_Login = true;
+            gameObject.GetComponent<AudioSource>().PlayOneShot(m_ButtonClip);
+            if (m_agcc.m_TestMode)
+            {
+                m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
+            }
+            else
+            {
+                Debug.Log("start fb login process");
+                FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, this.FbLoginCallback);
+                m_Login = true;
+            }
         }
     }
 
@@ -80,19 +89,44 @@ public class CLogin : MonoBehaviour {
 	string user_account;
     string user_password;
     string user_mail;
+    string user_id;
 
     void user_callback(IResult result)
     {
-        string md5 = getMd5Method(result.ResultDictionary["email"].ToString());
-        if (md5 != null)
-        {
-            user_mail = result.ResultDictionary["email"].ToString();
-            user_password = md5.Substring(16, 16);
-            user_account = md5.Substring(16, 10);
-            Debug.Log("user_account = " + user_account + ", user_password = " + user_password);
-            m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
-			m_agcc.setFBUserId(result.ResultDictionary["id"].ToString());
-        }
+        //    Debug.Log(result);
+        /*    string md5 = getMd5Method(result.ResultDictionary["email"].ToString());
+            if (md5 != null)
+            {
+                user_mail = result.ResultDictionary["email"].ToString();
+                user_password = md5.Substring(16, 16);
+                user_account = md5.Substring(16, 10);
+                user_id = result.ResultDictionary["id"].ToString();
+                Debug.Log("user_account = " + user_account + ", user_password = " + user_password + ", user_id = " + user_id);
+                m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
+                m_agcc.setFBUserId(result.ResultDictionary["id"].ToString());
+            }
+            else
+            {
+                Debug.Log("use fb Id to login");
+                string md55 = getMd5Method(result.ResultDictionary["id"].ToString());
+                user_password = md55.Substring(16, 16);
+                user_account = md55.Substring(16, 10);
+                user_mail = user_account + "@gmail.com";
+                user_id = result.ResultDictionary["id"].ToString();
+                Debug.Log("user_account = " + user_account + ", user_password = " + user_password + ", user_id = " + user_id);
+                m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
+                m_agcc.setFBUserId(result.ResultDictionary["id"].ToString());
+            }*/
+        Debug.Log("use fb Id to login");
+        string md55 = getMd5Method(result.ResultDictionary["id"].ToString());
+        user_password = md55.Substring(16, 16);
+        user_account = md55.Substring(16, 10);
+        user_mail = user_account + "@gmail.com";
+        user_id = result.ResultDictionary["id"].ToString();
+        Debug.Log("user_account = " + user_account + ", user_password = " + user_password + ", user_id = " + user_id);
+        m_agcc.ArcaletLaunch(user_account, user_password, user_mail);
+        m_agcc.setFBUserId(result.ResultDictionary["id"].ToString());
+        m_agcc.setFBUserName(result.ResultDictionary["name"].ToString());
     }
 
     private string getMd5Method(string input)

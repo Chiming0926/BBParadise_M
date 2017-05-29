@@ -28,7 +28,7 @@ public class CPorpsDialog : MonoBehaviour {
 	            foreach (Transform child in transform)
 	            {
 	                child.GetComponent<Renderer>().enabled = false;
-					Destroy(child.GetComponent<BoxCollider2D>());
+					Destroy(child.gameObject.GetComponent<BoxCollider2D>());
 	            }
 	        }
 			dialog = CLobby_OnClick.m_CurrentDialog;

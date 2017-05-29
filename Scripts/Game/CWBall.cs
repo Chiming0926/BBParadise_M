@@ -16,23 +16,62 @@ public class CWBall : MonoBehaviour
     private int cnt = 0;
     public int power = 4;
 
+    private int m_BomCnt = 60;
+
     // Use this for initialization
     void Start ()
     {
     }
 	
+    bool create_specific_ws(GameObject obj, Vector2 pos)
+    {
+        var sp = obj.GetComponent<SpriteRenderer>();
+        sp.sortingOrder = 18;
+        GameObject ins = Instantiate(obj, new Vector3(pos.x, pos.y, 0), gameObject.transform.rotation) as GameObject;
+        ins.name = "ws"; 
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(pos, new Vector2(0.1f, 0.1f), 0.0f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.name == "ws")
+                continue;
+            return true;
+        }
+        return false;
+    }
+
     void create_ws()
     {
-		var up   = ws_up.GetComponent<SpriteRenderer>();
-		var down = ws_down.GetComponent<SpriteRenderer>();
-		for (int i = 0; i < power; i++)
+        /*	var up   = ws_up.GetComponent<SpriteRenderer>();
+            var down = ws_down.GetComponent<SpriteRenderer>();
+            for (int i = 0; i < power; i++)
+            {
+                up.sortingOrder = 18;
+                down.sortingOrder = 18;
+                Instantiate(ws_up, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (i + 1), 0), gameObject.transform.rotation);
+                Instantiate(ws_down, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (-1-i), 0), gameObject.transform.rotation);
+                Instantiate(ws_right, new Vector3(gameObject.transform.position.x + 1.0f * (i + 1), gameObject.transform.position.y, 0), gameObject.transform.rotation);
+                Instantiate(ws_left, new Vector3(gameObject.transform.position.x + 1.0f * (-1 - i), gameObject.transform.position.y, 0), gameObject.transform.rotation);
+            }
+            */
+        for (int i = 0; i < power; i++)
         {
-			up.sortingOrder = 18;
-			down.sortingOrder = 18;
-            Instantiate(ws_up, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (i + 1), 0), gameObject.transform.rotation);
-            Instantiate(ws_down, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (-1-i), 0), gameObject.transform.rotation);
-            Instantiate(ws_right, new Vector3(gameObject.transform.position.x + 1.0f * (i + 1), gameObject.transform.position.y, 0), gameObject.transform.rotation);
-            Instantiate(ws_left, new Vector3(gameObject.transform.position.x + 1.0f * (-1 - i), gameObject.transform.position.y, 0), gameObject.transform.rotation);
+            if (create_specific_ws(ws_up, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (i + 1))))
+                break;  
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (create_specific_ws(ws_down, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (-1 - i))))
+                break;
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (create_specific_ws(ws_right, new Vector2(gameObject.transform.position.x + 1.0f * (i + 1), gameObject.transform.position.y)))
+                break;
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (create_specific_ws(ws_left, new Vector2(gameObject.transform.position.x + 1.0f * (-1 - i), gameObject.transform.position.y)))
+                break;
         }
     }
 
@@ -43,28 +82,33 @@ public class CWBall : MonoBehaviour
 
         for (int i=0; i<power; i++)
         {
-            destroy_obstacle(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (i + 1)));
-            destroy_obstacle(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (-1-i)));
-            destroy_obstacle(new Vector2(gameObject.transform.position.x + 1.0f * (i + 1), gameObject.transform.position.y));
-            destroy_obstacle(new Vector2(gameObject.transform.position.x + 1.0f * (-1-i), gameObject.transform.position.y));
+            if (destroy_obstacle(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (i + 1))))
+                break;
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (destroy_obstacle(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 1.0f * (-1 - i))))
+                break;
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (destroy_obstacle(new Vector2(gameObject.transform.position.x + 1.0f * (i + 1), gameObject.transform.position.y)))
+                break;
+        }
+        for (int i = 0; i < power; i++)
+        {
+            if (destroy_obstacle(new Vector2(gameObject.transform.position.x + 1.0f * (-1 - i), gameObject.transform.position.y)))
+                break;
         }
     }
 
-	bool map_out_of_range(int x, int y)
-	{
-		if (x < 0 || y < 0 || x > 15 || y > 9)
-		{
-			Debug.Log("wball out of ramge x = " + x + " y = " + y);
-			return true;
-		}
-		return false;
-	}
-
-    void destroy_obstacle(Vector2 pos)
+    bool destroy_obstacle(Vector2 pos)
     {
+        bool touch = false;
         Collider2D[] colliders = Physics2D.OverlapBoxAll(pos, new Vector2(0.1f, 0.1f), 0.0f);
         foreach (Collider2D collider in colliders)
         {
+            touch = true;
             if (collider.tag == "Player")
             {
 				/* Send death message */
@@ -80,6 +124,10 @@ public class CWBall : MonoBehaviour
 				/* don't destroy */
 				continue;
             }
+			if (collider.tag == "block")
+			{
+				continue;
+			}
 			if (collider.tag == "wball")
 			{
 				collider.gameObject.GetComponent<CWBall>().Bom();
@@ -89,8 +137,13 @@ public class CWBall : MonoBehaviour
                 collider.gameObject.GetComponent<CObstacle>().WoodenBom();
                 continue;
             }
+            if (collider.gameObject.name == "ws")
+            {
+                touch = false;
+            }
             Destroy(collider.gameObject);
         }
+        return touch;
     }
     
     internal void SetPower(int pw)
@@ -116,7 +169,7 @@ public class CWBall : MonoBehaviour
     void Update ()
     {
         bool changePic = false;
-        if (cnt < 120)
+        if (cnt < m_BomCnt)
         {
             if ((cnt / reset_factor) >= 1)
             {
@@ -132,7 +185,7 @@ public class CWBall : MonoBehaviour
                 spr.sprite = s;
             }
         }
-        else if (cnt >= 120 && cnt <130)
+        else if (cnt >= m_BomCnt && cnt < (m_BomCnt+10))
         {
             gameObject.GetComponent<AudioSource>().PlayOneShot(m_BomClip);
             create_ws();
