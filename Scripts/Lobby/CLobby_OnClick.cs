@@ -39,7 +39,7 @@ public class CLobby_OnClick : MonoBehaviour {
     {
         /* Scale up the button */
         m_OriScale = obj.transform.localScale;
-        obj.transform.localScale = new Vector3(1.1f, 1.1f , 1.0f);
+        obj.transform.localScale = new Vector3(1.05f, 1.05f , 1.0f);
 
         m_ScaleObj = obj;
         m_NextDialog = dialog;
@@ -53,7 +53,7 @@ public class CLobby_OnClick : MonoBehaviour {
         if (m_ScaleTimer != -1)
         {
             m_ScaleTimer++;
-            if (m_ScaleTimer > 120)
+            if (m_ScaleTimer > 90)
             {
                 //Debug.Log(m_OriTransform.localScal.x);
                 m_ScaleObj.transform.localScale = m_OriScale;
