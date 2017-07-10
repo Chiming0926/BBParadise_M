@@ -16,8 +16,16 @@ public partial class CGameManager
 
     private float start_x = 0;
     private float start_y = 10f;
-    
-    
+
+
+	enum GAME_RESOURCE
+    {
+        WBALL   = 1,
+        SYRUP   = 2,
+        NULL    = 4
+    };
+
+    /*
     private static int[ , ] pirate_map = 
                         {
                             {0, 0, 1, 0, (1 | 0x00020000), 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1| 0x00030000, 0, 0},
@@ -30,6 +38,34 @@ public partial class CGameManager
                             {1, (1 | 0x00010000), 1, 1, 1, (1 | 0x00020000), 1, 0, (2 | 0x00010000), 2, 0, 1, 1, 1, (1 | 0x00020000), 1, 1, 1},
                             {0, (3 | 0x00010000), 1, (1 | 0x00020000), 1, 1, 1, 1, (1 | 0x00010000), 1, 1, (1 | 0x00020000), 1, 1, 1,  1, 3, 0},
                             {0, 0, 1, 1, 0, (1 | 0x00020000), 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+                        }; */
+
+    private static int[,] pirate_map =
+                        {
+                            {0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0},
+                            {0, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 0},
+                            {1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1},
+                            {1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1},
+                            {0, 0, 1, 1, 1, 0, 2, 0, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0},
+                            {0, 0, 1, 1, 1, 0, 2, 0, 9, 9, 0, 2, 0, 1, 1, 1, 0, 0},
+                            {1, 1, 1, 0, 0, 1, 0, 2, 0, 0, 2, 0, 1, 0, 1, 0, 1, 1},
+                            {1, 1, 1, 1, 1, 1, 1, 0, 2, 2, 0, 1, 1, 1, 1, 1, 1, 1},
+                            {0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0},
+                            {0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+                        };
+
+    private static int[,] resource_map =
+                        {
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         };
     /*
        private static int[,] pirate_map =
@@ -135,6 +171,21 @@ public partial class CGameManager
         return false;
     }
 
+    internal void SetResource(string type, GameObject obj)
+    {
+		int typeNum = 0;
+		switch (type)
+        {
+            case "wball":
+                typeNum = (int)GAME_RESOURCE.WBALL;
+                break;
+            case "syrup":
+                typeNum = (int)GAME_RESOURCE.SYRUP;
+                break;
+        }
+		obj.GetComponent<CObstacle>().SetObstacleResource(typeNum);
+    }
+
     void GenerateObstacle(int[ , ] map)
     {
         /* map array */
@@ -159,21 +210,36 @@ public partial class CGameManager
                         case 1:
                             //obj = Instantiate(box, new Vector3(start_x + 1.0f * j, 4.5f - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
                             obj = Instantiate(pirate_box, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
-                            obj.GetComponent<CObstacle>().SetWoodenType(map[i, j]);
-                            obj.name = "wooden" + i + j;
+                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
+                            obj.name = "obstacle" + i + "/"+ j;
                             break;
                         case 2:
                             obj = Instantiate(cask, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
-                            obj.GetComponent<CObstacle>().SetWoodenType(map[i, j]);
-                            break;
+                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
+							obj.name = "obstacle" + i + "/"+ j;
+							break;
                         case 3:
                             obj = Instantiate(screw, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
-                            obj.GetComponent<CObstacle>().SetWoodenType(map[i, j]);
+                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
+							obj.name = "obstacle" + i + "/"+ j;
                             break;
                     }
                     
                 }
             }
+        }
+    }
+
+    internal void HandleBBResource(string msg)
+    {
+        string[] m = msg.Split('/');
+		int num = int.Parse(m[1]);
+		for (int i = 1; i <= num; i++)
+        {
+            string objName = "obstacle" + int.Parse(m[i * 2 + 1]) + "/" + int.Parse(m[i * 2 ]);
+			GameObject obj = GameObject.Find(objName);
+			if (obj)
+				SetResource(m[0], obj);
         }
     }
 }

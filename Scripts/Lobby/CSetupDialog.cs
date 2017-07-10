@@ -22,6 +22,8 @@ public class CSetupDialog : MonoBehaviour
                     child.GetComponent<Renderer>().enabled = true;
                     child.gameObject.AddComponent<BoxCollider2D>();
                 }
+                SetSpecialAudio("special_audio1");
+                SetBackgroundAudio("background_audio1");
             }
             else
             {
@@ -33,6 +35,32 @@ public class CSetupDialog : MonoBehaviour
                 }
             }
             dialog = CLobby_OnClick.m_CurrentDialog;
+        }
+    }
+
+    internal void SetSpecialAudio(string name)
+    {
+        for (int i=0; i<5; i++)
+        {
+            string objName = "special_audio" + (i + 1).ToString("0");
+            GameObject obj = GameObject.Find(objName);
+            if (obj != null)
+            {
+                obj.GetComponent<SpriteRenderer>().enabled = name != objName ? false : true;
+            }
+        }
+    }
+
+    internal void SetBackgroundAudio(string name)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            string objName = "background_audio" + (i + 1).ToString("0");
+            GameObject obj = GameObject.Find(objName);
+            if (obj != null)
+            {
+                obj.GetComponent<SpriteRenderer>().enabled = name != objName ? false : true;
+            }
         }
     }
 }

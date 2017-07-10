@@ -771,7 +771,6 @@ public class CPlayer : MonoBehaviour
         set_player_pic(dir);
         direct = dir;
         CGameManager gameMgr = FindObjectOfType(typeof(CGameManager)) as CGameManager;
-
         if (m_RemotePlayer == false)
         {
             if (dir == PLAYER_DIRECTION.RIGHT)

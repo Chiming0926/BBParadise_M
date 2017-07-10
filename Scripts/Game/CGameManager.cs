@@ -27,7 +27,6 @@ public partial class CGameManager : MonoBehaviour
         Time.captureFramerate = 30;
         QualitySettings.vSyncCount = 2;
         InitMessageModule();
-        CreateMap(0);
         oldTime = Time.realtimeSinceStartup;
     }
 

@@ -44,8 +44,9 @@ public class CObstacle : MonoBehaviour
         }
     }    
 
-    internal void SetWoodenType(int type)
+    internal void SetObstacleResource(int type)
     {
-        m_WoodenType = (int)((type & 0xffff0000) >> 16);
+        m_WoodenType = type;
+		WoodenBom();
     }
 }

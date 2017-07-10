@@ -30,7 +30,7 @@ public partial class CGameManager
 
     List<PlayerData> player_list = new List<PlayerData>();
 
-    private static bool NONETWORK = false;
+    private static bool NONETWORK = true;
 
     PLAYER_DIRECTION cur_direct;
     AGCC m_agcc = null;
@@ -49,7 +49,7 @@ public partial class CGameManager
             player_list.Add(playerData);
             playerData.player_ins.name = "Player02";
             playerData.player_ins.GetComponent<CPlayer>().SetControllerStatus(true);
-            playerData.player_ins.GetComponent<CPlayer>().SetPlayerInfo(playerData.player_account, 555, true);
+            playerData.player_ins.GetComponent<CPlayer>().SetPlayerInfo(playerData.player_account, 555, false);
 
             SpriteRenderer sp = playerData.player_ins.GetComponent<SpriteRenderer>();
             m_Controller = true;
@@ -204,6 +204,11 @@ public partial class CGameManager
                 }
             }
         }
+    }
+
+    internal void HandleCreateMap(string msg)
+    {
+        CreateMap(0);
     }
 
     internal void player_move_local(string msg)

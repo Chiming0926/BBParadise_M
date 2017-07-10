@@ -198,5 +198,17 @@ public class CWBall : MonoBehaviour
         	DestroyWBall();
         }
         cnt++;
+
+        /* check collider status */
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(0.5f, 0.5f), 0.0f);
+        if (colliders.Length == 0)
+        {
+            Collider2D c2d = gameObject.GetComponent<Collider2D>();
+            if (c2d == null)
+            {
+                gameObject.AddComponent<BoxCollider2D>();
+            }
+        }
+
     }
 }

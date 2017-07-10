@@ -13,7 +13,7 @@ public partial class AGCC : MonoBehaviour {
     public static int BBDEBUG_ERROR = 4;
     private static int CHANGE_NAME_COST = 80;
     private static int bbDebug = 7; /* debug level info, warning, error */
-    internal bool m_TestMode = false;
+    internal bool m_TestMode = true;
 
 	#region Variables	
 	string gguid = "7245577f-4961-7642-a64c-ba5bb008892c";
@@ -134,6 +134,12 @@ public partial class AGCC : MonoBehaviour {
                     break;
                 case "client_bb_wball":
                     game.HandleClientWBall(cmds[1]);
+                    break;
+                case "bb_resource":
+                    game.HandleBBResource(cmds[1]);
+                    break;
+                case "bb_create_map":
+                    game.HandleCreateMap(cmds[1]);
                     break;
                 default:
 					break;
