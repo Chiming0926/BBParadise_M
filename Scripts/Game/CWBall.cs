@@ -16,7 +16,7 @@ public class CWBall : MonoBehaviour
     private int cnt = 0;
     public int power = 4;
 
-    private int m_BomCnt = 60;
+    private int m_BomCnt = 300;
 
     // Use this for initialization
     void Start ()
@@ -130,8 +130,11 @@ public class CWBall : MonoBehaviour
 			}
 			if (collider.tag == "wball")
 			{
+                Debug.Log("@@@@@@@@@@@@ wball");
 				collider.gameObject.GetComponent<CWBall>().Bom();
-			}
+                continue;
+
+            }
             if (collider.tag == "wooden")
             {
                 collider.gameObject.GetComponent<CObstacle>().WoodenBom();
@@ -153,7 +156,7 @@ public class CWBall : MonoBehaviour
 
 	internal void Bom()
 	{
-		cnt = 120;
+		cnt = m_BomCnt + 7;
 	}
 
 	void DestroyWBall()

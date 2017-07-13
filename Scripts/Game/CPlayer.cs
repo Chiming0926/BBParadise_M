@@ -110,7 +110,7 @@ public class CPlayer : MonoBehaviour
         player = gameObject;
         static_wball = water_ball;
 		wball_cnt = 0;
-		m_MaxWball = 1;
+		m_MaxWball = 2;
         m_MaxPower = 1;
 
         m_Mounts = PLAYER_MOUNTS.NULL;
