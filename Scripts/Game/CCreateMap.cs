@@ -242,4 +242,10 @@ public partial class CGameManager
 				SetResource(m[0], obj);
         }
     }
+
+    internal void CreateMonster()
+    {
+        GameObject obj;
+        obj = Instantiate(cask, new Vector3(3, 3, 0), gameObject.transform.rotation) as GameObject;
+    }
 }
