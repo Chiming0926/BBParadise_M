@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Threading;
 
 public class CMonster : MonoBehaviour
 {
     private const int GAME_FRAME = 30;
-    private const int GAME_UPDATE_RATE = 10;
+    private const int GAME_UPDATE_RATE = 30;
     internal enum MONSTER_NUMBER
     {
         LITTRE_STONE,
@@ -18,10 +19,12 @@ public class CMonster : MonoBehaviour
     private Texture2D m_MonsterBom;
 
     /* status */
-    private int m_Direct = 0;  /* 0: Stop, 1:Up, 2:Down, 3:Left, 4:Right */
-    private int m_UpdateCnt = 0;
-    private float m_MoveSpeed = 2.5f;
-
+    private int     m_Direct = 0;  /* 0: Stop, 1:Up, 2:Down, 3:Left, 4:Right */
+    private int     m_UpdateCnt = 0;
+    private float   m_MoveSpeed = 0.02f;
+    private Vector2 m_Goal;
+    private int     m_IdleWait = 0;
+    private bool    m_Moving = false;
 
     internal void SetupMonster(MONSTER_NUMBER id)
     {
@@ -56,30 +59,96 @@ public class CMonster : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-	    if (m_UpdateCnt >= GAME_UPDATE_RATE)
-        {
-            UpdateDirection();
-            m_UpdateCnt = 0;
-        }
-        else
-        {
-            m_UpdateCnt++;
-        }
-	}
+        Vector2 pos = transform.position;
 
-    void UpdateDirection()
-    {
-        int new_direct;
-        /* try 100 times */
-        for (int i =0; i<100; i++)
+        if (m_Moving)
         {
-            new_direct = (int)Random.Range(0, 5.0f);
-            if (new_direct != m_Direct)
+            if (pos == m_Goal)
             {
-                m_Direct = new_direct;
-                GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, 0);
-                return;
+                // Reached goal. Back to Idle.
+                m_Moving = false;
+                m_IdleWait = Random.Range(1, 30);
+            }
+
+            else
+            {
+                // Walk a bit towards goal
+                Vector2 v = Vector2.MoveTowards(pos,
+                                                m_Goal,
+                                                m_MoveSpeed);
+                transform.position = v;
             }
         }
+
+        else
+        {
+            // Idle
+            if (m_IdleWait > 0)
+            {
+                // Update the animation parameter
+                //anim.SetInteger("Direction", 4);
+
+                // Wait a bit so it doesn't look nervous
+                --m_IdleWait;
+            }
+            else
+            {
+                UpdateNewTarget();
+            }
+        }
+
+        SetSortingOrder();
+
+    }
+
+    void UpdateNewTarget()
+    {
+        m_Direct = (int)Random.Range(0, 5.0f);
+        if (Moving())
+            return;
+        /* Monster can't move, we need to change direct */
+      //  for ()
+      //  int new_direct = 
+    }
+
+    bool Moving()
+    {
+        Vector2 pos = transform.position;
+        switch (m_Direct)
+        {
+            case 0:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0); return true;
+            case 1:
+                m_Goal = pos + new Vector2(0, 1); break;
+            case 2:
+                m_Goal = pos + new Vector2(0, -1); break;
+            case 3:
+                m_Goal = pos + new Vector2(1, 0); break;
+            case 4:
+                m_Goal = pos + new Vector2(-1, 0); break;
+        }
+
+        int posx = (int)(m_Goal.x + 0.5f);
+        int posy = (int)(m_Goal.y + 0.5f);
+        m_Goal.x = posx;
+        m_Goal.y = posy;
+        if (m_Goal.x < 0 || m_Goal.x > 17)
+            return false;
+        if (m_Goal.y < 0 || m_Goal.y > 10)
+            return false;
+        string objName = "obstacle" + posx + "/" + posy;
+        GameObject obj = GameObject.Find(objName);
+        if (obj != null)
+            return false;
+        m_Goal.x = posx;
+        m_Goal.y = posy;
+        m_Moving = true;
+        return true;
+    }
+
+    void SetSortingOrder()
+    {
+        var sr = this.GetComponent<SpriteRenderer>();
+        sr.sortingOrder = 10 - Mathf.RoundToInt(gameObject.transform.position.y) + 8;
     }
 }

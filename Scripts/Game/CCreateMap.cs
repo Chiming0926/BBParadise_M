@@ -205,23 +205,25 @@ public partial class CGameManager
 
                     int num = map[i, j] & 0x0000ffff;
                     GameObject obj;
+                    int posx = (int)start_x + 1 * j;
+                    int posy = (int)start_y - 1 * i;
                     switch (num)
                     {
                         case 1:
                             //obj = Instantiate(box, new Vector3(start_x + 1.0f * j, 4.5f - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
-                            obj = Instantiate(pirate_box, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
+                            obj = Instantiate(pirate_box, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
                             //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
-                            obj.name = "obstacle" + i + "/"+ j;
+                            obj.name = "obstacle" + posx + "/"+ posy;
                             break;
                         case 2:
-                            obj = Instantiate(cask, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
+                            obj = Instantiate(cask, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
                             //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
-							obj.name = "obstacle" + i + "/"+ j;
+							obj.name = "obstacle" + posx + "/"+ posy;
 							break;
                         case 3:
-                            obj = Instantiate(screw, new Vector3(start_x + 1.0f * j, start_y - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
+                            obj = Instantiate(screw, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
                             //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
-							obj.name = "obstacle" + i + "/"+ j;
+							obj.name = "obstacle" + posx + "/"+ posy;
                             break;
                     }
                     

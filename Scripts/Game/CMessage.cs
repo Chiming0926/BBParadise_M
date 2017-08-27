@@ -54,6 +54,8 @@ public partial class CGameManager
             SpriteRenderer sp = playerData.player_ins.GetComponent<SpriteRenderer>();
             m_Controller = true;
             m_MyPlayer = playerData.player_ins;
+
+       //     CreateMap(0);
         }
     }
 

@@ -44,7 +44,6 @@ public partial class AGCC {
 
 	internal void CancelMatch()
 	{
-        Debug.Log("@@@@@@@@@@@@ 123");
 		ag.PrivacySend("cancel:" + ag.poid, serverSettings.dpPoid);
 	}
 
