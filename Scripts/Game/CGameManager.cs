@@ -3,7 +3,7 @@ using System.Collections;
 
 public partial class CGameManager : MonoBehaviour
 {
-    private static int MAX_LEVEL_NUM = 2;
+    private static int MAX_LEVEL_NUM = 3;
     private static bool DEBUG = true;
 
     private float oldTime; 

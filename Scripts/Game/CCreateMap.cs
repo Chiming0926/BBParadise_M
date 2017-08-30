@@ -8,6 +8,7 @@ public partial class CGameManager
     public GameObject   screw;
     public GameObject   pirate_box;
     public GameObject   block;
+    public GameObject   snowbox1;
     public Texture2D[]  m_level = new Texture2D[2];
     public Texture2D    m_flag;
 
@@ -23,6 +24,13 @@ public partial class CGameManager
         WBALL   = 1,
         SYRUP   = 2,
         NULL    = 4
+    };
+
+    enum GAME_LEVEL
+    {
+        GAME_PIRATE = 0,
+        GAME_OO     = 1,
+        GAME_SNOW1  = 2,
     };
 
     /*
@@ -65,6 +73,20 @@ public partial class CGameManager
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        };
+
+    private static int[,] snow_map1 =
+                        {
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0},
+                            {0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0},
+                            {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 2, 2, 2, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 0, 1, 0},
+                            {0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0},
+                            {0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0, 1, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         };
     /*
@@ -110,21 +132,36 @@ public partial class CGameManager
                             {0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
                         };
     */
+    void CreateLevel2()
+    {
+        GameObject bkgObj = new GameObject();
+        bkgObj.name = "Background";
+        bkgObj.AddComponent<SpriteRenderer>();
+        Texture2D textBkg = Resources.Load("Textures/Game/Background/snow") as Texture2D;
+
+        Sprite s = Sprite.Create(textBkg, new Rect(0, 0, textBkg.width, textBkg.height), new Vector3(0.5f, 0.5f, 0));
+        bkgObj.GetComponent<SpriteRenderer>().sprite = s;
+        bkgObj.transform.position = new Vector3(8.5f, 5.5f, 1);
+        bkgObj.transform.localScale = new Vector3(1.1f, 1.1f, 1.0f);
+
+        GenerateObstacle(GAME_LEVEL.GAME_SNOW1, snow_map1);
+    }
+
     bool CreateMap(int level_num)
     {
         if (level_num < MAX_LEVEL_NUM)
         {
-            /* create map */
-            GameObject bkgObj = new GameObject();
-            bkgObj.name = "Background";
-            bkgObj.AddComponent<SpriteRenderer>();
-            Sprite s = Sprite.Create(m_level[level_num], new Rect(0, 0, m_level[level_num].width,
-                m_level[level_num].height), new Vector3(0.5f, 0.5f, 0));
-            bkgObj.GetComponent<SpriteRenderer>().sprite = s;
-            bkgObj.transform.position = new Vector3(8.5f, 5.5f, 1);
-
             if (level_num == 0)
             {
+                /* create map */
+                GameObject bkgObj = new GameObject();
+                bkgObj.name = "Background";
+                bkgObj.AddComponent<SpriteRenderer>();
+                Sprite s = Sprite.Create(m_level[level_num], new Rect(0, 0, m_level[level_num].width,
+                    m_level[level_num].height), new Vector3(0.5f, 0.5f, 0));
+                bkgObj.GetComponent<SpriteRenderer>().sprite = s;
+                bkgObj.transform.position = new Vector3(8.5f, 5.5f, 1);
+
                 /* create special things */
                 GameObject flagObj = new GameObject();
                 flagObj.name = "Flag";
@@ -139,7 +176,7 @@ public partial class CGameManager
                 BoxCollider2D col = flagObj.GetComponent<BoxCollider2D>();
                 col.offset = new Vector2(0.007018559f, -1.696823f);
                 col.size = new Vector2(2.2064f, 1.126348f);
-                GenerateObstacle(pirate_map);
+                GenerateObstacle(0, pirate_map);
 
                 /* create the wall */
                 GameObject wallObj = new GameObject();
@@ -165,6 +202,14 @@ public partial class CGameManager
                     Destroy(obj.GetComponent<BoxCollider2D>());
                 }
             }
+            else if (level_num == 1)
+            {
+
+            }
+            else if (level_num == 2)
+            {
+                CreateLevel2();
+            }
 
             return true;
         }
@@ -186,7 +231,7 @@ public partial class CGameManager
 		obj.GetComponent<CObstacle>().SetObstacleResource(typeNum);
     }
 
-    void GenerateObstacle(int[ , ] map)
+    void GenerateObstacle(GAME_LEVEL level_num, int[ , ] map)
     {
         /* map array */
         var sr_box = pirate_box.GetComponent<SpriteRenderer>();
@@ -211,18 +256,24 @@ public partial class CGameManager
                     {
                         case 1:
                             //obj = Instantiate(box, new Vector3(start_x + 1.0f * j, 4.5f - 1.0f * i, 0), gameObject.transform.rotation) as GameObject;
-                            obj = Instantiate(pirate_box, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
-                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
-                            obj.name = "obstacle" + posx + "/"+ posy;
+                            if (level_num == GAME_LEVEL.GAME_PIRATE)
+                            {
+                                obj = Instantiate(pirate_box, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
+                                obj.name = "obstacle" + posx + "/" + posy;
+                            }
+                            else if (level_num == GAME_LEVEL.GAME_SNOW1)
+                            {
+                                obj = Instantiate(snowbox1, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
+                                obj.name = "obstacle" + posx + "/" + posy;
+                            }
+
                             break;
                         case 2:
                             obj = Instantiate(cask, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
-                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
 							obj.name = "obstacle" + posx + "/"+ posy;
 							break;
                         case 3:
                             obj = Instantiate(screw, new Vector3(posx, posy, 0), gameObject.transform.rotation) as GameObject;
-                            //obj.GetComponent<CObstacle>().SetWoodenType(resource_map[i, j]);
 							obj.name = "obstacle" + posx + "/"+ posy;
                             break;
                     }

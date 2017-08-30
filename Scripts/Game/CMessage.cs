@@ -55,7 +55,7 @@ public partial class CGameManager
             m_Controller = true;
             m_MyPlayer = playerData.player_ins;
 
-       //     CreateMap(0);
+            CreateMap(2);
         }
     }
 
