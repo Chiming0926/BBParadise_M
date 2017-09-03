@@ -134,6 +134,7 @@ public partial class CGameManager
     */
     void CreateLevel2()
     {
+        start_y = 9.75f;
         GameObject bkgObj = new GameObject();
         bkgObj.name = "Background";
         bkgObj.AddComponent<SpriteRenderer>();

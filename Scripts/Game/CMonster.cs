@@ -67,7 +67,7 @@ public class CMonster : MonoBehaviour
             {
                 // Reached goal. Back to Idle.
                 m_Moving = false;
-                m_IdleWait = Random.Range(1, 30);
+                m_IdleWait = 0;// Random.Range(1, 30);
             }
 
             else
@@ -138,6 +138,7 @@ public class CMonster : MonoBehaviour
             return false;
         string objName = "obstacle" + posx + "/" + posy;
         GameObject obj = GameObject.Find(objName);
+        Debug.Log("@@@ objName = " + objName);
         if (obj != null)
             return false;
         m_Goal.x = posx;
