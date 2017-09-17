@@ -21,7 +21,8 @@ public class CMonster : MonoBehaviour
     /* status */
     private int     m_Direct = 0;  /* 0: Stop, 1:Up, 2:Down, 3:Left, 4:Right */
     private int     m_UpdateCnt = 0;
-    private float   m_MoveSpeed = 0.02f;
+    private float   m_MoveSpeed = 1.5f;
+  //  private float   m_MoveSpeed = 0.04f;
     private Vector2 m_Goal;
     private int     m_IdleWait = 0;
     private bool    m_Moving = false;
@@ -79,7 +80,6 @@ public class CMonster : MonoBehaviour
                 transform.position = v;
             }
         }
-
         else
         {
             // Idle
@@ -96,7 +96,14 @@ public class CMonster : MonoBehaviour
                 UpdateNewTarget();
             }
         }
-
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(pos, new Vector2(1.0f, 1.5f), 0.0f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.tag == "Player")
+            {
+                collider.gameObject.GetComponent<CPlayer>().PlayerKilledByMonster();
+            }
+        }
         SetSortingOrder();
 
     }
@@ -113,6 +120,30 @@ public class CMonster : MonoBehaviour
 
     bool Moving()
     {
+        
+        switch (m_Direct)
+        {
+            case 0:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+                break;
+            case 1:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(m_MoveSpeed, 0);
+                break;
+            case 2:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-m_MoveSpeed, 0);
+                break;
+            case 3:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, m_MoveSpeed);
+                break;
+            case 4:
+                GetComponent<Rigidbody2D>().velocity = new Vector2(0, -m_MoveSpeed);
+                break;
+        }
+        m_IdleWait = 30;
+        if (m_Direct == 0)
+            m_IdleWait = 5;
+        return true;
+        /*
         Vector2 pos = transform.position;
         switch (m_Direct)
         {
@@ -144,7 +175,8 @@ public class CMonster : MonoBehaviour
         m_Goal.x = posx;
         m_Goal.y = posy;
         m_Moving = true;
-        return true;
+        return true;*/
+
     }
 
     void SetSortingOrder()

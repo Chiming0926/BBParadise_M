@@ -1062,6 +1062,13 @@ public class CPlayer : MonoBehaviour
 
     }
 
+    internal void PlayerKilledByMonster()
+    {
+        CGameManager gameMgr = FindObjectOfType(typeof(CGameManager)) as CGameManager;
+        gameMgr.SendDeathMessage(gameObject);
+        Destroy(gameObject);
+    }
+
     void Update()
     {
         if (m_PlayerDeadCnt > 0)
